@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="cn.mldn.joy.dao.IPaymentAccountDAO">
+<cache/>
+	<select id="findAll" resultType="PaymentAccount">
+		select ID,account,accountType,name,cellphone,mail,loginPassword,paymentPassword,IDNum,accountState,createdatetime,updatetime,flag	
+		from PaymentAccount where flag=1
+	</select>
+	
+	<select id="findById" parameterType="String" resultType="PaymentAccount">
+		select  ID,account,accountType,name,cellphone,mail,loginPassword,paymentPassword,IDNum,accountState,createdatetime,updatetime,flag	
+		from PaymentAccount where ID=#{ID}
+	</select>
+	
+	<insert id="doCreate" parameterType="PaymentAccount">
+		insert into PaymentAccount (ID,account,accountType,name,cellphone,mail,loginPassword,paymentPassword,IDNum,accountState,createdatetime,updatetime,flag)  
+		values(#{ID},#{account},#{accountType},#{name},#{cellphone},#{mail},#{loginPassword},#{paymentPassword},#{IDNum},#{accountState},#{createdatetime},#{updatetime},#{flag})
+	</insert>
+	
+	<update id="doUpdate" parameterType="PaymentAccount">
+		update PaymentAccount set
+		account=#{account},accountType=#{accountType},name=#{name},cellphone=#{cellphone},mail=#{mail},
+		loginPassword=#{loginPassword},paymentPassword=#{paymentPassword},updatetime=#{updatetime}
+		where ID=#{ID}
+	</update>
+	
+	<update id="doRemoveBatch" parameterType="java.lang.String">
+		UPDATE PaymentAccount SET flag=0 
+		<where>
+			ID IN 
+			<foreach collection="array" open="(" close=")" separator="," item="ele">
+				#{ele}
+			</foreach>
+		</where>
+	</update>
+	
+	<update id="doRemoveById" parameterType="String">
+		update PaymentAccount set flag=0 where ID=#{id}
+	</update>
+	
+	<select id="findAllAccountType" resultType="String">
+		select accountType from PaymentAccount
+	</select>
+	<select id="findAllAccountState" resultType="String">
+		select accountState from PaymentAccount
+	</select>
+	
+	<select id="getAllCount"  parameterType="java.util.Map" resultType="Integer">
+		select count(*) from PaymentAccount
+		<where>
+			<if test="name!= null">
+				name like #{name} and 
+			</if>
+			<if test="cellphone!= null">
+				cellphone like #{cellphone} and
+			</if>
+			<if test="mail!= null">
+				mail like #{mail} and
+			</if>
+			<if test="accountType!= null">
+				accountType like #{accountType} and
+			</if>
+			<if test="accountState!= null">
+				accountState like #{accountState} and
+			</if>
+			flag=1
+		</where>
+	</select>
+	<select id="findAllSPlit" parameterType="java.util.Map" resultType="PaymentAccount">
+		select ID,account,accountType,name,cellphone,mail,loginPassword,paymentPassword,IDNum,accountState,createdatetime,updatetime,flag	
+		from PaymentAccount
+		<where>
+			<if test="name!= null">
+				name like #{name} and 
+			</if>
+			<if test="cellphone!= null">
+				cellphone like #{cellphone} and
+			</if>
+			<if test="mail!= null">
+				mail like #{mail} and
+			</if>
+			<if test="accountType!= null">
+				accountType like #{accountType} and
+			</if>
+			<if test="accountState!= null">
+				accountState like #{accountState} and
+			</if>
+			1=1
+		</where>
+		LIMIT #{start},#{lineSize} 
+	</select>
+</mapper>  

@@ -1,0 +1,4 @@
+# MQ服务器地址
+brokerURL=tcp://192.168.28.251:61616
+# 队列名
+mldn.healthData.queue=mldn.healthData.queue.dev

@@ -1,0 +1,62 @@
+package cn.mldn.joy.vo;
+
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class PaymentAccount implements Serializable{
+	private String ID ;
+	private String account  ;
+	private String acountType ;
+	private String name ;
+	private String cellphone ;
+	private String mail ;
+	private String loginPassword  ;
+	public String getID() {
+		return ID;
+	}
+	public void setID(String iD) {
+		ID = iD;
+	}
+	public String getAccount() {
+		return account;
+	}
+	public void setAccount(String account) {
+		this.account = account;
+	}
+	public String getAcountType() {
+		return acountType;
+	}
+	public void setAcountType(String acountType) {
+		this.acountType = acountType;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getCellphone() {
+		return cellphone;
+	}
+	public void setCellphone(String cellphone) {
+		this.cellphone = cellphone;
+	}
+	public String getMail() {
+		return mail;
+	}
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+	public String getLoginPassword() {
+		return loginPassword;
+	}
+	public void setLoginPassword(String loginPassword) {
+		this.loginPassword = loginPassword;
+	}
+	@Override
+	public String toString() {
+		return "PaymentAccount [ID=" + ID + ", account=" + account + ", acountType=" + acountType + ", name=" + name
+				+ ", cellphone=" + cellphone + ", mail=" + mail + ", loginPassword=" + loginPassword + "]";
+	}
+	
+}

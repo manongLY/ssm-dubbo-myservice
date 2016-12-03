@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="cn.mldn.joy.dao.IPaymentChannelDAO">
+	<cache/>
+	<insert id="doCreate" parameterType="cn.mldn.joy.vo.PaymentChannel">
+		INSERT INTO PaymentChannel(ID, channelName, channelCode, channelDescription, createdatetime, updatetime, paymentMode, channelState, channelIndex) 
+		VALUES (#{ID},#{channelName},#{channelCode},#{channelDescription},#{createdatetime},#{updatetime},#{paymentMode},#{channelState},#{channelIndex});
+	</insert>
+	<update id="doUpdate" parameterType="cn.mldn.joy.vo.PaymentChannel">
+		UPDATE PaymentChannel SET channelName=#{channelName},channelCode=#{channelCode}, channelDescription=#{channelDescription}, updatetime=#{updatetime}, paymentMode=#{paymentMode}, channelState=#{channelState}, channelIndex=#{channelIndex} 
+		WHERE ID=#{ID}
+	</update>
+	<select id="findById" parameterType="java.lang.String" resultType="cn.mldn.joy.vo.PaymentChannel">
+		SELECT ID,channelName,channelCode,channelDescription,createdatetime,updatetime,paymentMode,channelState,channelIndex
+		FROM PaymentChannel
+		WHERE ID=#{ID}
+	</select>
+	<select id="findByChannelCode" parameterType="java.lang.String" resultType="cn.mldn.joy.vo.PaymentChannel">
+		SELECT ID,channelName,channelCode,channelDescription,createdatetime,updatetime,paymentMode,channelState,channelIndex
+		FROM PaymentChannel
+		WHERE channelCode=#{channelCode}
+	</select>	
+	<select id="findByChannelName" parameterType="java.lang.String" resultType="cn.mldn.joy.vo.PaymentChannel">
+		SELECT ID,channelName,channelCode,channelDescription,createdatetime,updatetime,paymentMode,channelState,channelIndex
+		FROM PaymentChannel
+		WHERE channelName=#{channelName}
+	</select>		
+	<delete id="doRemoveBatch" parameterType="String">
+		UPDATE PaymentChannel SET channelState='删除'
+		<where>
+			ID IN 
+			<foreach collection="array" open="(" close=")" separator="," item="ele">
+				#{ele}
+			</foreach>
+		</where>
+	</delete>
+	<select id="findAllChannelCode" resultType="java.lang.String">
+		SELECT channelCode FROM PaymentChannel
+	</select>
+	<select id="findAllPaymentMode" resultType="java.lang.String">
+		SELECT paymentMode FROM PaymentChannel
+	</select>	
+	<select id="findAllChannelState" resultType="java.lang.String">
+		SELECT channelState FROM PaymentChannel
+	</select>
+	<select id="findAll" resultType="cn.mldn.joy.vo.PaymentChannel">
+		SELECT ID,channelName,channelCode,channelDescription,createdatetime,updatetime,paymentMode,channelState,channelIndex
+		FROM PaymentChannel
+	</select>	
+	<select id="findAllLimit"  parameterType="java.util.Map" resultType="cn.mldn.joy.vo.PaymentChannel">
+		SELECT * FROM (SELECT ID,channelName,channelCode,channelDescription,createdatetime,updatetime,paymentMode,channelState,channelIndex
+		FROM PaymentChannel
+		<where>
+			<if test="channelName !=null">
+				channelName LIKE #{channelName} AND
+			</if>
+			<if test="channelCode != null">
+				channelCode LIKE #{channelCode} AND
+			</if>
+			<if test="paymentMode != null">
+				paymentMode LIKE #{paymentMode} AND
+			</if>
+			<if test="channelState != null">
+				channelState LIKE #{channelState} AND
+			</if>
+			1=1
+		</where>
+		ORDER BY createdatetime DESC) temp
+		LIMIT #{start},#{lineSize} ;
+	</select>	
+	<select id="getAllCount"  parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM PaymentChannel
+		<where>
+			<if test="channelName !=null">
+				channelName LIKE #{channelName} AND
+			</if>
+			<if test="channelCode != null">
+				channelCode LIKE #{channelCode} AND
+			</if>
+			<if test="paymentMode != null">
+				paymentMode LIKE #{paymentMode} AND
+			</if>
+			<if test="channelState != null">
+				channelState LIKE #{channelState} AND
+			</if>
+			1=1
+		</where>
+	</select>
+</mapper>  

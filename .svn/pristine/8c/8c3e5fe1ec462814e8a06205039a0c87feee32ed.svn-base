@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="cn.mldn.joy.dao.ICustomerPaymentChannelDAO">
+<cache/>
+	<select id="findAll" resultType="CustomerPaymentChannel">
+		select ID,platFormCuID,cutomeridNum,paymentChannelid,
+		paymentChannelCode,paymentMode,ratio,createdatetime,updatetime        
+		from CustomerPaymentChannel where flag=1
+	</select>
+	
+	<insert id="doCreate" parameterType="CustomerPaymentChannel">
+		insert into CustomerPaymentChannel (ID,platFormCuID,cutomeridNum,paymentChannelid,
+		paymentChannelCode,paymentMode,ratio,createdatetime,updatetime)
+		values(ID=#{ID},platFormCuID=#{platFormCuID},cutomeridNum=#{cutomeridNum},PaymentChannelid=#{paymentChannelid},
+		paymentChannelCode=#{paymentChannelCode},paymentMode=#{paymentMode},ratio=#{ratio},createdatetime=#{createdatetime},Updatetime=#{updatetime})
+	</insert>
+	
+	<update id="doRemoveById" parameterType="CustomerPaymentChannel">
+		update CustomerPaymentChannel set flag=0 where ID=#{id}
+	</update>
+	
+	<update id="doRemoveBatch" parameterType="String">
+		UPDATE CustomerPaymentChannel SET flag=0
+		<where>
+			ID IN 
+			<foreach collection="array" open="(" close=")" separator="," item="ele">
+				#{ele}
+			</foreach>
+		</where>
+	</update>
+	
+	<select id="findAllPaymentMode" resultType="String">
+		select paymentMode from CustomerPaymentChannel
+	</select>
+	<select id="findAllPaymentChannelCode" resultType="String">
+		select paymentChannelCode from CustomerPaymentChannel
+	</select>
+	
+	<select id="getAllCount" parameterType="java.util.Map" resultType="Integer">
+		select count(*) from CustomerPaymentChannel
+		<where>
+			<if test="paymentMode!= null">
+				paymentMode like #{paymentMode} and 
+			</if>
+			<if test="paymentChannelCode!= null">
+				paymentChannelCode like #{paymentChannelCode} and
+			</if>
+			1=1
+		</where>
+	</select>
+	<select id="findAllSplit" parameterType="java.util.Map" resultType="CustomerPaymentChannel">
+		select ID,platFormCuID,cutomeridNum,paymentChannelid,
+		paymentChannelCode,paymentMode,ratio,createdatetime,updatetime        
+		from CustomerPaymentChannel
+		<where>
+			<if test="paymentMode!= null">
+				paymentMode like #{paymentMode} and 
+			</if>
+			<if test="paymentChannelCode!= null">
+				paymentChannelCode like #{paymentChannelCode} and
+			</if>
+			flag=1
+		</where>
+		limit #{start},#{lineSize}
+	</select>
+</mapper>  

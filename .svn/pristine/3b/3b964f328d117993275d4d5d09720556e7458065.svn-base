@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="cn.mldn.joy.dao.IPaymentChannelDetailDAO">
+	<cache/>
+	<select id="findAll"  resultType="cn.mldn.joy.vo.PaymentChannelDetail">
+		SELECT ID,cutomerID,customerNum,tallydate,paymentChannelID,paymentChannel,paymentSuccessAmount,paymentPrice,refundSuccessAmount,refundPrice,calculatetime,paymentTotalAmount,refundTotalAmount
+		FROM PaymentChannelDetail;
+	</select>	
+	
+	<select id="findAllByCustomerNum" parameterType="String" resultType="PaymentChannelDetail">
+		select ID,cutomerID,customerNum,tallydate,paymentChannelID,paymentChannel,paymentSuccessAmount,
+		paymentPrice,refundSuccessAmount,refundPrice,calculatetime,paymentTotalAmount,refundTotalAmount
+		from PaymentChannelDetail
+		<where>
+			<if test="customerNum!=null">
+				customerNum like #{customerNum}
+			</if>
+		</where>
+	</select>
+	
+	<select id="findAllByPaymentChannel" parameterType="String" resultType="PaymentChannelDetail">
+		select ID,cutomerID,customerNum,tallydate,paymentChannelID,paymentChannel,paymentSuccessAmount,
+		paymentPrice,refundSuccessAmount,refundPrice,calculatetime,paymentTotalAmount,refundTotalAmount
+		from PaymentChannelDetail
+		<where>
+			<if test="paymentChannel!=null">
+				paymentChannel like #{paymentChannel}
+			</if>
+		</where>
+	</select>
+	
+	<select id="getAllCount" parameterType="java.util.Map" resultType="Integer">
+		select count(*) from PaymentChannelDetail
+		<where>
+			<if test="customerNum!= null">
+				customerNum like #{customerNum} and 
+			</if>
+			<if test="paymentChannel!= null">
+				paymentChannel like #{paymentChannel} and
+			</if>
+			1=1
+		</where>
+	</select>
+	
+	<select id="findAllSplit" parameterType="java.util.Map" resultType="PaymentChannelDetail">
+		select ID,cutomerID,customerNum,tallydate,paymentChannelID,paymentChannel,paymentSuccessAmount,
+		paymentPrice,refundSuccessAmount,refundPrice,calculatetime,paymentTotalAmount,refundTotalAmount
+		from PaymentChannelDetail
+		<where>
+			<if test="customerNum!= null">
+				customerNum like #{customerNum} and 
+			</if>
+			<if test="paymentChannel!= null">
+				paymentChannel like #{paymentChannel} and
+			</if>
+			flag=1
+		</where>
+		limit #{start},#{lineSize}
+	</select>
+	
+	<select id="findAllPaymentChannel" resultType="java.lang.String">
+		select paymentChannel from PaymentChannelDetail
+	</select>
+	
+	<select id="findAllCustomerNum" resultType="java.lang.String">
+		select customerNum from PaymentChannelDetail
+	</select>
+	
+</mapper>  

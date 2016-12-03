@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="cn.mldn.joy.dao.IOrderInfoDAO">
+	<cache/>
+	<insert id="doCreate" parameterType="OrderInfo">
+		insert into OrderInfo(ID,paymentPFOrderNum,customerOrderNum,platFormCuNum,entrCuNum,orderPrice,orderScore,serviceType,APIVersion,privateAccount,productName,productPrice,productQuantity,productNote,productShowURL,createdatetime,updatetime,remark,expireTime,paymentBatch)
+		values (#{ID},#{paymentPFOrderNum},#{customerOrderNum},#{platFormCuNum},#{entrCuNum},#{orderPrice},#{orderScore},#{serviceType},#{APIVersion},#{privateAccount},#{productName},#{productPrice},#{productQuantity},#{productNote},#{productShowURL},#{createdatetime},#{updatetime},#{remark},#{expireTime},#{paymentBatch}) ;
+	</insert>
+	<select id="findAllSplit" parameterType="java.util.Map" resultType="OrderInfo">
+		select ID,paymentPFOrderNum,customerOrderNum,platFormCuNum,entrCuNum,orderPrice,orderScore,serviceType,APIVersion,privateAccount,productName,productPrice,productQuantity,productNote,productShowURL,createdatetime,updatetime,remark,expireTime,paymentBatch
+		from OrderInfo
+		<where>
+			<if test="paymentPFOrderNum != ''and paymentPFOrderNum !=null">
+				paymentPFOrderNum like #{paymentPFOrderNum} and
+			</if>
+			<if test="customerOrderNum != '' and customerOrderNum !=null">
+				customerOrderNum like #{customerOrderNum} and
+			</if>
+			<if test="platFormCuNum != '' and platFormCuNum !=null">
+				platFormCuNum like #{platFormCuNum} and
+			</if>
+			<if test="ft != '' and st != '' and st !=null and ft!=null">
+				createdatetime between #{ft} and #{st} and
+			</if>
+			orderScore != -1
+		</where>
+		LIMIT #{start},#{lineSize}
+	</select>
+	<select id="getAllCount" parameterType="java.util.Map" resultType="Integer">
+		SELECT COUNT(*) FROM OrderInfo 
+		<where>
+			<if test="paymentPFOrderNum != ''and paymentPFOrderNum !=null">
+				paymentPFOrderNum like #{paymentPFOrderNum} and
+			</if>
+			<if test="customerOrderNum != '' and customerOrderNum !=null">
+				customerOrderNum like #{customerOrderNum} and
+			</if>
+			<if test="platFormCuNum != '' and platFormCuNum !=null">
+				platFormCuNum like #{platFormCuNum} and
+			</if>
+			<if test="ft != '' and st != '' and st !=null and ft!=null">
+				createdatetime between #{ft} and #{st} and
+			</if>
+			orderScore != -1
+		</where>
+	</select>
+	<select id="findByPaymentPFOrderNum" parameterType="String" resultType="OrderInfo">
+		select ID,paymentPFOrderNum,customerOrderNum,platFormCuNum,entrCuNum,orderPrice,orderScore,serviceType,APIVersion,privateAccount,productName,productPrice,productQuantity,productNote,productShowURL,createdatetime,updatetime,remark,expireTime,paymentBatch
+		from OrderInfo
+		WHERE paymentPFOrderNum=#{paymentPFOrderNum}
+	</select>
+	<update id="doRemove" parameterType="String">
+		update OrderInfo set orderScore=-1 
+		<where> 
+			paymentPFOrderNum in  
+			<foreach collection="array" open="(" close=")" separator="," item="paymentPFOrderNum">
+				#{paymentPFOrderNum}
+			</foreach>
+		</where>
+	</update>
+</mapper>  

@@ -1,0 +1,4 @@
+package cn.mldn.joy.dao;
+
+public interface IPaymentChannelDetailDAO {
+}

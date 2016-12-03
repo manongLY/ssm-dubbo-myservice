@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="cn.mldn.joy.dao.IPaymentSNDAO">
+	<cache/>
+	<insert id="doCreate" parameterType="PaymentSN">
+		insert into PaymentSN(paymentTransactionNum,paymentPFOrderNum,customerOrderNum,signature,signatureData,paymentChannel,paymentMode,paymentPrice,submitTime,fee,paymentServer,paymentType,buyerAccount,thirdpartyTransactionNum,transactionState,onboardTime,paymentTime,endTime,customerAttr,IVRnum,remark,asynchronousURL,synchronousURL,paymentMinus,platformCustomerID,customerPaymentChannelID,cellphone,username,transactionExpireTime,transactionSource)
+		values(#{paymentTransactionNum},#{paymentPFOrderNum},#{customerOrderNum},#{signature},#{signatureData},#{paymentChannel},#{paymentMode},#{paymentPrice},#{submitTime},#{fee},#{paymentServer},#{paymentType},#{buyerAccount},#{thirdpartyTransactionNum},#{transactionState},#{onboardTime},#{paymentTime},#{endTime},#{customerAttr},#{IVRnum},#{remark},#{asynchronousURL},#{synchronousURL},#{paymentMinus},#{platformCustomerID},#{customerPaymentChannelID},#{cellphone},#{username},#{transactionExpireTime},#{transactionSource});
+	</insert>
+	<select id="findAllSplit" parameterType="java.util.Map" resultType="PaymentSN">
+		select paymentTransactionNum,paymentPFOrderNum,customerOrderNum,signature,signatureData,paymentChannel,paymentMode,paymentPrice,submitTime,fee,paymentServer,paymentType,buyerAccount,thirdpartyTransactionNum,transactionState,onboardTime,paymentTime,endTime,customerAttr,IVRnum,remark,asynchronousURL,synchronousURL,paymentMinus,platformCustomerID,customerPaymentChannelID,cellphone,username,transactionExpireTime,transactionSource
+		from PaymentSN
+		<where>
+			<if test="paymentTransactionNum != '' and paymentTransactionNum !=null">
+				paymentTransactionNum like #{paymentTransactionNum} and
+			</if>
+			<if test="paymentPFOrderNum != '' and paymentPFOrderNum !=null">
+				paymentPFOrderNum like #{paymentPFOrderNum} and
+			</if>
+			<if test="platformCustomerID != '' and platformCustomerID !=null">
+				platformCustomerID like #{platformCustomerID} and
+			</if>
+			<if test="ft != '' and st != ''and ft != null and st != null">
+				paymentTime between #{ft} and #{st} and
+			</if>
+			transactionState != '失效'
+		</where>
+		LIMIT #{start},#{lineSize}
+	</select>
+	<select id="getAllCount" parameterType="java.util.Map" resultType="Integer">
+		SELECT COUNT(*) FROM PaymentSN 
+		<where>
+			<if test="paymentPFOrderNum != '' and paymentPFOrderNum !=null">
+				paymentPFOrderNum like #{paymentPFOrderNum} and
+			</if>
+			<if test="paymentPFOrderNum != '' and paymentPFOrderNum !=null">
+				paymentPFOrderNum like #{paymentPFOrderNum} and
+			</if>
+			<if test="platformCustomerID != '' and platformCustomerID !=null">
+				platformCustomerID like #{platformCustomerID} and
+			</if>
+			<if test="ft != '' and st != ''and ft != null and st != null">
+				paymentTime between #{ft} and #{st} and
+			</if>
+			transactionState != '失效'
+		</where>
+	</select>
+	<select id="findByTransactionSN" parameterType="String" resultType="PaymentSN">
+		select paymentTransactionNum,paymentPFOrderNum,customerOrderNum,signature,signatureData,paymentChannel,paymentMode,paymentPrice,submitTime,fee,paymentServer,paymentType,buyerAccount,thirdpartyTransactionNum,transactionState,onboardTime,paymentTime,endTime,customerAttr,IVRnum,remark,asynchronousURL,synchronousURL,paymentMinus,platformCustomerID,customerPaymentChannelID,cellphone,username,transactionExpireTime,transactionSource
+		from PaymentSN
+		WHERE paymentTransactionNum=#{paymentTransactionNum}
+	</select>
+	<select id="findByPaymentPFOrderNum" parameterType="String" resultType="PaymentSN">
+		select paymentTransactionNum,paymentPFOrderNum,customerOrderNum,signature,signatureData,paymentChannel,paymentMode,paymentPrice,submitTime,fee,paymentServer,paymentType,buyerAccount,thirdpartyTransactionNum,transactionState,onboardTime,paymentTime,endTime,customerAttr,IVRnum,remark,asynchronousURL,synchronousURL,paymentMinus,platformCustomerID,customerPaymentChannelID,cellphone,username,transactionExpireTime,transactionSource
+		from PaymentSN
+		WHERE paymentPFOrderNum=#{paymentPFOrderNum}
+	</select>
+	<update id="doRemove" parameterType="String">
+		update PaymentSN 
+		set transactionState= '失效'
+		<where>
+			paymentPFOrderNum in
+			<foreach collection="array" open="(" close=")" separator="," item="ele">
+				#{ele}
+			</foreach>
+		</where>
+	</update>
+</mapper>  

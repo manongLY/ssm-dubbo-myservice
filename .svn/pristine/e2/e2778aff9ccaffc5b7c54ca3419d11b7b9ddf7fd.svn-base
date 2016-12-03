@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="cn.mldn.joy.dao.ITransactionLogDAO">
+	<cache/>
+	<select id="findByCustomerOrderNum" parameterType="java.lang.String" resultType="cn.mldn.joy.vo.TransactionLog">
+		SELECT  ID,transactionSN,paymentPFOrderNum,customerOrderNum,transactionType,paymentChannel,paymentMode,remark,expandInfo,actionTime,platformCunstomerID
+		FROM transactionLog
+		WHERE customerOrderNum=#{customerOrderNum}
+	</select>
+	<select id="getAllCount" parameterType="cn.mldn.joy.vo.TransactionLogSearch" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM transactionLog
+		<where>
+				<if test="transactionSN !=null">
+					transactionSN LIKE #{transactionSN} AND
+				</if>
+				<if test="paymentPFOrderNum !=null">
+					paymentPFOrderNum LIKE #{paymentPFOrderNum} AND
+				</if>
+				<if test="customerOrderNum !=null">
+					customerOrderNum LIKE #{customerOrderNum} AND
+				</if>
+				<if test="platformCunstomerID !=null">
+					platformCunstomerID LIKE #{platformCunstomerID} AND
+				</if>
+				<if test="paymentChannel !=null">
+					paymentChannel LIKE #{paymentChannel} AND
+				</if>
+				<if test="paymentMode != null">
+					paymentMode LIKE #{paymentMode} AND
+				</if>
+				<if test="transactionType !=null">
+					transactionType LIKE #{transactionType} AND
+				</if>
+				<if test="startTime !=null and endTime == null">
+					actionTime BETWEEN #{startTime} AND sysdate() AND
+				</if>
+				<if test="endTime !=null and startTime== null">
+					actionTime BETWEEN '1977-01-01' AND #{endTime} AND
+				</if>
+				<if test="endTime !=null and startTime != null">
+					actionTime BETWEEN #{startTime} AND #{endTime} AND
+				</if>
+				1=1
+			</where>
+	</select>
+	<select id="findAll" parameterType="cn.mldn.joy.vo.TransactionLogSearch" resultType="cn.mldn.joy.vo.TransactionLog">
+		SELECT * FROM(
+			SELECT  ID,transactionSN,paymentPFOrderNum,customerOrderNum,transactionType,paymentChannel,paymentMode,remark,expandInfo,actionTime,platformCunstomerID
+			FROM transactionLog
+			<where>
+				<if test="transactionSN !=null">
+					transactionSN LIKE #{transactionSN} AND
+				</if>
+				<if test="paymentPFOrderNum !=null">
+					paymentPFOrderNum LIKE #{paymentPFOrderNum} AND
+				</if>
+				<if test="customerOrderNum !=null">
+					customerOrderNum LIKE #{customerOrderNum} AND
+				</if>
+				<if test="platformCunstomerID !=null">
+					platformCunstomerID LIKE #{platformCunstomerID} AND
+				</if>
+				<if test="paymentChannel !=null">
+					paymentChannel LIKE #{paymentChannel} AND
+				</if>
+				<if test="paymentMode != null">
+					paymentMode LIKE #{paymentMode} AND
+				</if>
+				<if test="transactionType !=null">
+					transactionType LIKE #{transactionType} AND
+				</if>
+				<if test="startTime !=null and endTime == null">
+					actionTime BETWEEN #{startTime} AND sysdate() AND
+				</if>
+				<if test="endTime !=null and startTime== null">
+					actionTime BETWEEN '1977-01-01' AND #{endTime} AND
+				</if>
+				<if test="endTime !=null and startTime != null">
+					actionTime BETWEEN #{startTime} AND #{endTime} AND
+				</if>
+				1=1
+			</where>
+			ORDER BY actionTime DESC) temp
+		LIMIT #{start},#{lineSize}
+	</select>
+	<select id="findAllPaymentMode" resultType="java.lang.String">
+		SELECT  paymentMode FROM PaymentChannel
+	</select>
+	<select id="findAllTransactionType" resultType="java.lang.String">
+		SELECT  transactionType FROM transactionLog
+	</select>
+	<select id="findAllPaymentChannel" resultType="java.lang.String">
+		SELECT  channelName FROM PaymentChannel
+	</select>
+</mapper>  

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	<dubbo:application name="${dubbo.application.name}" /> <!--当前应用名称，用于注册中心计算应用间依赖关系，注意：消费者和提供者应用名不要一样，此参数不是匹配条件，你当前项目叫什么名字就填什么，和提供者消费者角色无关 -->
+	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}" /> <!--注册中心配置 使用multicast广播注册中心暴露服务地址 --><!--说明：如果有多个不同的注册中心，可以声明多个<dubbo:registry> -->
+	<dubbo:protocol name="dubbo" port="${dubbo.protocol.port}" /> <!--用dubbo协议在xxx端口暴露服务 -->
+	<dubbo:provider timeout="${dubbo.provider.timeout}" /><!--远程服务调用超时时间(毫秒) -->
+	<!-- <dubbo:monitor address="${dubbo.monitor.address}" /> --> <!--监控中心 -->
+	<!-- 声明需要暴露的服务接口 -->
+	<dubbo:service interface="cn.mldn.api.IMessage" ref="MsgAPI"
+		version="${dubbo.iterface.version}" />
+	<dubbo:service interface="cn.mldn.joy.service.back.ISysAccountServiceBack" ref="accountSerivceBackImpl" version="${dubbo.iterface.version}" />
+	<dubbo:service interface="cn.mldn.joy.service.back.IOrderServiceBack" ref="orderServiceBackImpl" version="${dubbo.iterface.version}" />
+	<dubbo:service interface="cn.mldn.joy.service.back.ILogServiceBack" ref="logServiceBackImpl" version="${dubbo.iterface.version}" />
+	<dubbo:service interface="cn.mldn.joy.service.back.IPaymentChannelServiceBack" ref="paymentChannelServiceBackImpl"
+	version="${dubbo.iterface.version}" />
+	<dubbo:service interface="cn.mldn.joy.service.back.ITransactionLogServiceBack" ref="transactionLogServiceBackImpl"
+	version="${dubbo.iterface.version}" />
+	<dubbo:service interface="cn.mldn.joy.service.back.IPaymentAccountServiceBack" ref="paymentAccountSerivceBackImpl"
+		version="${dubbo.iterface.version}" />
+	<dubbo:service interface="cn.mldn.joy.service.back.ICustomerPaymentChannelServiceBack" ref="customerPaymentChannelServiceBackImpl"
+		version="${dubbo.iterface.version}" />
+	<dubbo:service interface="cn.mldn.joy.service.back.IPaymentChannelDetailServiceBack" ref="paymentChannelDetailServiceBackImpl"
+		version="${dubbo.iterface.version}" />
+	 <!-- 用dubbo协议在20880端口暴露服务 -->  
+<!--     <dubbo:protocol name="dubbo" port="20880" />  -->
+</beans>
